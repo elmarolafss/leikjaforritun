@@ -177,17 +177,20 @@ teningakastsri endar
 """""
 safnari byrjar
 """""
-def safnari():
+def safnari(w):
     safnari = True
     while safnari:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 main_menu()
             screen.fill(black)
+            text = text_format(w, font, 40, white)
             start = text_format("Press space to start", font, 60, white)
 
             start_rect = start.get_rect()
+            text_rect = text.get_rect()
             screen.blit(start, (screen_width / 2 - (start_rect[2] / 2), 80))
+            screen.blit(text, (screen_width / 2 - (text_rect[2] / 2), 190))
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     the_collector()
@@ -203,21 +206,24 @@ def things(thingx, thingy, color):
     gameDisplay.blit(color, (thingx, thingy))
 
 def the_collector():
+    counter = 0
+    c2 = 0
     collect = True
     x = 350
     w = 100
     x_change = 0
 
     thing_startx = random.randrange(0, screen_width)
-    thing_starty = -600
+    thing_starty = 0
     thing_speed = 4
 
     loftsteinn = pygame.image.load("loftsteinn.png")
     stars = pygame.image.load("stars.png")
-    while collect:
 
+    while collect:
         for event in pygame.event.get():
-            thing_speed += 0.3
+
+            thing_speed += 1
             if event.type == pygame.QUIT:
                 main_menu()
 
@@ -241,15 +247,25 @@ def the_collector():
             thing_starty = 0
             thing_startx = random.randrange(0, screen_width)
 
-        if x > screen_width - w or x < 0:
-            x = 350
+
         x += x_change
 
+        if thing_starty >= 500 and thing_starty <= 520 and thing_startx <= x + w:
+            w += 10
+            counter += 1
+        if thing_starty >= 525 and thing_starty <= 540:
+            c2 += 1
+        print(c2)
+        if c2 == 20:
+            safnari("You Lost :(")
+        if counter == 20:
+            safnari("You Won!!")
         object(x,w)
-
+        score = text_format("points = %s" % counter, font, 20, white)
+        score_rect = score.get_rect()
+        screen.blit(score, (screen_width / 2 - (score_rect[2] / 3), 80))
         pygame.display.update()
         clock.tick(FPS)
-
 def main_menu():
     menu = True
     selected = "tening"
@@ -273,7 +289,7 @@ def main_menu():
                         menu = False
                         print(tening())
                     if selected == "safn":
-                        safnari()
+                        safnari("Reach 20 points!")
                     if selected == "pong":
                         print("pong")
                     if selected == "quit":
