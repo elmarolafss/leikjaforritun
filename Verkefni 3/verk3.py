@@ -26,10 +26,15 @@ display.set_caption("Verkefni 3")
 backdrop = image.load("pic/bc.png")
 
 enemies = []
+lives = []
 
 x = 0
 for count in range(10):
     enemies.append(Sprite(50 * x + 50, 50,"pic/enemy.png"))
+    x += 1
+x = 0
+for count in range(5):
+    lives.append(Sprite(50 * x + 390,20, "pic/heart.png"))
     x += 1
 
 me = Sprite(20,400,"pic/me.png")
@@ -39,11 +44,16 @@ enemyMissile = Sprite(0,480, "pic/enemyMissile.png")
 quit = 0
 enemyspeed = 3
 
+x = 0
 while quit == 0:
+
     screen.blit(backdrop, (0,0))
     for count in range(len(enemies)):
         enemies[count].x += enemyspeed
         enemies[count].render()
+
+    for count in range(len(lives)):
+        lives[count].render()
 
     if enemies[len(enemies) - 1].x > 590:
         enemyspeed = -3
@@ -63,16 +73,27 @@ while quit == 0:
         enemyMissile.x = enemies[random.randint(0, len(enemies) - 1)].x
         enemyMissile.y = enemies[0].y
 
-    if Intersect(me.x, me.y, enemyMissile.x, enemyMissile.y):
-        quit = 1
 
+
+    if Intersect(me.x, me.y, enemyMissile.x, enemyMissile.y,):
+        x+=1
+        if x == 1:
+            del lives[0]
+
+
+    print(x)
     for count in range(0, len(enemies)):
         if Intersect(meMissile.x, meMissile.y, enemies[count].x, enemies[count].y):
             del enemies[count]
             break
 
+    if len(lives) == 0:
+        print("dieded")
+        quit+=1
+
     if len(enemies) == 0:
-        quit = 1
+        print("win")
+        quit+=1
 
     for ourevent in event.get():
         if ourevent.type == QUIT:
