@@ -77,11 +77,18 @@ while quit == 0:
 
     if Intersect(me.x, me.y, enemyMissile.x, enemyMissile.y,):
         x+=1
+        print(x)
         if x == 1:
             del lives[0]
+        if x == 20:
+            del lives[0]
+        if x == 30:
+            del lives[0]
+        if x == 40:
+            del lives[0]
+        if x == 50:
+            del lives[0]
 
-
-    print(x)
     for count in range(0, len(enemies)):
         if Intersect(meMissile.x, meMissile.y, enemies[count].x, enemies[count].y):
             del enemies[count]
@@ -99,10 +106,14 @@ while quit == 0:
         if ourevent.type == QUIT:
             quit = 1
         if ourevent.type == KEYDOWN:
-            if ourevent.key == K_RIGHT and me.x < 590:
+            if ourevent.key == K_RIGHT and me.x < 615:
                 me.x += 5
-            if ourevent.key == K_LEFT and me.x > 10:
+            if ourevent.key == K_LEFT and me.x > 0:
                 me.x -= 5
+            if ourevent.key == K_UP and me.y > 5:
+                me.y -= 5
+            if ourevent.key == K_DOWN and me.y < 435:
+                me.y += 5
             if ourevent.key == K_SPACE:
                 meMissile.x = me.x
                 meMissile.y = me.y
