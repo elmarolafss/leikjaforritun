@@ -1,4 +1,5 @@
 from pygame import *
+import pygame
 import random
 
 class Sprite:
@@ -24,6 +25,7 @@ screen = display.set_mode((640, 480))
 key.set_repeat(1, 1)
 display.set_caption("Verkefni 3")
 backdrop = image.load("pic/bc.png")
+score = 0
 
 enemies = []
 lives = []
@@ -44,10 +46,29 @@ enemyMissile = Sprite(0,480, "pic/enemyMissile.png")
 quit = 0
 enemyspeed = 3
 
+myfont = pygame.font.SysFont("monospace", 30)
+endgame = pygame.font.SysFont("monospace", 100)
+
+
+
+
 x = 0
 while quit == 0:
+    def win():
+        screen.blit(backdrop, (0, 0))
+        label = endgame.render("You Win", 1, (255, 255, 255))
+        screen.blit(label, (100, 100))
 
-    screen.blit(backdrop, (0,0))
+
+    def loss():
+        screen.blit(backdrop, (0, 0))
+        label = endgame.render("You Lost", 1, (255, 255, 255))
+        screen.blit(label, (100, 100))
+
+    screen.blit(backdrop, (0, 0))
+    label = myfont.render("score = %s"%score, 1, (255, 255, 255))
+    screen.blit(label, (20, 20))
+
     for count in range(len(enemies)):
         enemies[count].x += enemyspeed
         enemies[count].render()
@@ -59,6 +80,7 @@ while quit == 0:
         enemyspeed = -3
         for count in range(len(enemies)):
             enemies[count].y += 5
+
 
     if enemies[0].x < 10:
         enemyspeed = 3
@@ -92,15 +114,14 @@ while quit == 0:
     for count in range(0, len(enemies)):
         if Intersect(meMissile.x, meMissile.y, enemies[count].x, enemies[count].y):
             del enemies[count]
+            score += 1
             break
 
     if len(lives) == 0:
-        print("dieded")
-        quit+=1
+        loss()
 
     if len(enemies) == 0:
-        print("win")
-        quit+=1
+        win()
 
     for ourevent in event.get():
         if ourevent.type == QUIT:
