@@ -43,6 +43,15 @@ for x in range(5):
 for x in range(5):
     lives2.append(Sprite(50 * x + 950, 750, "pic/heart.png"))
 
+endgame = pygame.font.SysFont("monospace", 100)
+def pl1win():
+
+    label = endgame.render("player 1 Wins", 1, (255, 255, 255))
+    screen.blit(label, (100, 100))
+def pl2win():
+    label = endgame.render("player 2 Wins", 1, (255, 255, 255))
+    screen.blit(label, (100, 100))
+
 carryOn = True
 
 clock = pygame.time.Clock()
@@ -145,11 +154,12 @@ while carryOn:
         lives[count].render()
     for count in range(len(lives2)):
         lives2[count].render()
-    for i in lives:
-        if i == 0:
-            print("player2wins")
-    if lives2 == 0:
-        print("Player1wins")
+    if len(lives) == 0:
+        carryOn = False
+        pl1win()
+    if len(lives2) == 0:
+        carryOn = False
+        pl2win()
 
     tank1.render()
     tank2.render()
